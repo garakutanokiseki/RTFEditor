@@ -4,6 +4,8 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:RTFEditor="clr-namespace:RTFEditor"
+    xmlns:CustomWPFColorPicker="clr-namespace:CustomWPFColorPicker;assembly=CustomWPFColorPicker"
+    xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
 	mc:Ignorable="d"
 	x:Class="RTFEditor.RTFBox"
 	x:Name="RTFEditor"    
@@ -15,99 +17,87 @@
     </UserControl.Resources>   
 
     <DockPanel>
-        <ToolBar x:Name="ToolBarOben" DockPanel.Dock="Top">
-        	<Button x:Name="ToolStripButtonOpen" Click="ToolStripButtonOpen_Click">
-				<Image Source="Images\Open.png" Stretch="None"/>				
-			</Button>
-			<Button x:Name="ToolStripButtonPrint" Click="ToolStripButtonPrint_Click">
-				<Image Source="Images\Print.png" Stretch="None"/>				
-			</Button>
-			<Separator/>
-			<Button x:Name="ToolStripButtonCut" Command="ApplicationCommands.Cut" ToolTip="Cut">
-				<Image Source="Images\Cut.png" Stretch="None"/>				
-			</Button>
-			<Button x:Name="ToolStripButtonCopy" Command="ApplicationCommands.Copy" ToolTip="Copy">
-				<Image Source="Images\Copy.png" Stretch="None"/>				
-			</Button>
-			<Button x:Name="ToolStripButtonPaste" Command="ApplicationCommands.Paste" ToolTip="Paste">
-				<Image Source="Images\Paste.png" Stretch="None"/>				
-			</Button>
-			<Button x:Name="ToolStripButtonUndo" Command="ApplicationCommands.Undo" ToolTip="Undo">
-				<Image Source="Images\Undo.png" Stretch="None"/>				
-			</Button>
-			<Button x:Name="ToolStripButtonRedo" Command="ApplicationCommands.Redo" ToolTip="Redo">
-				<Image Source="Images\Redo.png" Stretch="None"/>				
-			</Button>
-			<Separator/>
-			<ComboBox x:Name="Fonttype" ItemsSource="{Binding Mode=OneWay, Source={StaticResource FontListKlasse}}" DropDownClosed="Fonttype_DropDownClosed" />
-            <ComboBox x:Name="Fontheight" ItemsSource="{Binding Mode=OneWay, Source={StaticResource FontHeightKlasse}}"  DropDownClosed="Fontheight_DropDownClosed" />
-        </ToolBar>
         <ToolBar x:Name="ToolBarUnten" DockPanel.Dock="Top">
-        	<ToggleButton x:Name="ToolStripButtonBold" Command="EditingCommands.ToggleBold" ToolTip="Bold">
+            <!--
+            <Button x:Name="ToolStripButtonCut" Command="ApplicationCommands.Cut" ToolTip="切り取り">
+                <Image Source="Images\Cut.png" Stretch="None"/>
+            </Button>
+            <Button x:Name="ToolStripButtonCopy" Command="ApplicationCommands.Copy" ToolTip="コピー">
+                <Image Source="Images\Copy.png" Stretch="None"/>
+            </Button>
+            <Button x:Name="ToolStripButtonPaste" Command="ApplicationCommands.Paste" ToolTip="貼り付け">
+                <Image Source="Images\Paste.png" Stretch="None"/>
+            </Button>
+            <Button x:Name="ToolStripButtonUndo" Command="ApplicationCommands.Undo" ToolTip="元に戻す">
+                <Image Source="Images\Undo.png" Stretch="None"/>
+            </Button>
+            <Button x:Name="ToolStripButtonRedo" Command="ApplicationCommands.Redo" ToolTip="やり直し">
+                <Image Source="Images\Redo.png" Stretch="None"/>
+            </Button>
+            <Separator/>
+            -->
+            <ComboBox x:Name="Fonttype" ItemsSource="{Binding Mode=OneWay, Source={StaticResource FontListKlasse}}" DropDownClosed="Fonttype_DropDownClosed" />
+            <ComboBox x:Name="Fontheight" ItemsSource="{Binding Mode=OneWay, Source={StaticResource FontHeightKlasse}}"  DropDownClosed="Fontheight_DropDownClosed" />
+            <ToggleButton x:Name="ToolStripButtonBold" ToolTip="太字" Click="ToolStripButtonBold_Click">
         		<Image Source="Images\Bold.png" Stretch="None"/>				
         	</ToggleButton>
-        	<ToggleButton x:Name="ToolStripButtonItalic" Command="EditingCommands.ToggleItalic" ToolTip="Italic">
+        	<ToggleButton x:Name="ToolStripButtonItalic" ToolTip="斜体" Click="ToolStripButtonItalic_Click">
         		<Image Source="Images\Italic.png" Stretch="None"/>				
         	</ToggleButton>
-			<ToggleButton x:Name="ToolStripButtonUnderline" Command="EditingCommands.ToggleUnderline" ToolTip="Underline">
+			<ToggleButton x:Name="ToolStripButtonUnderline" ToolTip="下線" Click="ToolStripButtonUnderline_Click">
         		<Image Source="Images\Underline.png" Stretch="None"/>				
         	</ToggleButton>
-			<ToggleButton x:Name="ToolStripButtonStrikeout" ToolTip="Strikeout" Click="ToolStripButtonStrikeout_Click">
+			<ToggleButton x:Name="ToolStripButtonStrikeout" ToolTip="取り消し線" Click="ToolStripButtonStrikeout_Click">
         		<Image Source="Images\Strikeout.png" Stretch="None"/>				
         	</ToggleButton>
         	<Separator/>
-        	<Button x:Name="ToolStripButtonTextcolor" Click="ToolStripButtonTextcolor_Click">
-        		<Image Source="Images\Textcolor.png" Stretch="None"/>				
-        	</Button>
-        	<Button x:Name="ToolStripButtonBackcolor" Click="ToolStripButtonBackcolor_Click">
-        		<Image Source="Images\Backcolor.png" Stretch="None"/>				
-        	</Button>
+            <Button Click="TextColorSelectedHandler">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="A" FontWeight="Bold" FontSize="12" Foreground="{Binding ElementName=textColorPicker, Path=CurrentColor}"/>
+                    <CustomWPFColorPicker:ColorPickerControlView x:Name="textColorPicker" ColorSelected="TextColorSelectedHandler" />
+                </StackPanel>
+            </Button>
+            <Button Click="BackColorSelectedHandler">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images\Textcolor.png" Stretch="None"/>
+                    <CustomWPFColorPicker:ColorPickerControlView x:Name="backColorPicker" ColorSelected="BackColorSelectedHandler" />
+                </StackPanel>
+            </Button>
 			<Separator/>
-        	<ToggleButton x:Name="ToolStripButtonAlignLeft" Command="EditingCommands.AlignLeft" ToolTip="Align Left" Click="ToolStripButtonAlignLeft_Click">
-        		<Image Source="Images\AlignLeft.png" Stretch="None"/>				
+        	<ToggleButton x:Name="ToolStripButtonAlignLeft" ToolTip="左揃え" Click="ToolStripButtonAlignLeft_Click">
+                <Image Source="Images\AlignLeft.png" Stretch="None"/>				
         	</ToggleButton>
-			<ToggleButton x:Name="ToolStripButtonAlignCenter" Command="EditingCommands.AlignCenter" ToolTip="Align Center" Click="ToolStripButtonAlignCenter_Click">
+			<ToggleButton x:Name="ToolStripButtonAlignCenter" ToolTip="中央揃え" Click="ToolStripButtonAlignCenter_Click">
         		<Image Source="Images\AlignCenter.png" Stretch="None"/>				
         	</ToggleButton>
-			<ToggleButton x:Name="ToolStripButtonAlignRight" Command="EditingCommands.AlignRight" ToolTip="Align Right" Click="ToolStripButtonAlignRight_Click">
+			<ToggleButton x:Name="ToolStripButtonAlignRight" ToolTip="右揃え" Click="ToolStripButtonAlignRight_Click">
         		<Image Source="Images\AlignRight.png" Stretch="None"/>				
         	</ToggleButton>
         	<Separator/>
-			<Button x:Name="ToolStripButtonBulletList" Command="EditingCommands.ToggleBullets" ToolTip="Bullets">
+            <ToggleButton x:Name="ToolStripButtonBulletList" ToolTip="箇条書き(点)" Click="ToolStripButtonBulletList_Click">
         		<Image Source="Images\BulletList.png" Stretch="None"/>				
-        	</Button>
-			<Button x:Name="ToolStripButtonNumbersList" Command="EditingCommands.ToggleNumbering" ToolTip="Numbers">
-        		<Image Source="Images\NumbersList.png" Stretch="None"/>				
-        	</Button>
+        	</ToggleButton>
 			<Separator/>
-			<Button x:Name="ToolStripButtonIndent" Command="EditingCommands.IncreaseIndentation" ToolTip="Increase Indent">
+			<Button x:Name="ToolStripButtonIndent" ToolTip="インデントを増やす" Click="ToolStripButtonIndent_Click">
         		<Image Source="Images\Indent.png" Stretch="None"/>				
         	</Button>
-			<Button x:Name="ToolStripButtonIndentDelete" Command="EditingCommands.DecreaseIndentation" ToolTip="Decrease Indent">
+			<Button x:Name="ToolStripButtonIndentDelete" ToolTip="インデントを減らす" Click="ToolStripButtonIndentDelete_Click">
         		<Image Source="Images\IndentRemove.png" Stretch="None"/>				
         	</Button>
-			<Separator/>
-			<ToggleButton x:Name="ToolStripButtonSubscript" ToolTip="Subscript" Click="ToolStripButtonSubscript_Click">
-        		<Image Source="Images\Subscript.png" Stretch="None"/>				
-        	</ToggleButton>
-			<ToggleButton x:Name="ToolStripButtonSuperscript" ToolTip="Superscript" Click="ToolStripButtonSuperscript_Click">
-        		<Image Source="Images\Superscript.png" Stretch="None"/>				
-        	</ToggleButton>
         </ToolBar>
-        <StatusBar x:Name="StatusBar" DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <Label x:Name="LabelZeileNr" Content="ZeileNr" BorderThickness="1" BorderBrush="DarkGray" />
-            </StatusBarItem>
-            <StatusBarItem >
-                <Label x:Name="LabelSpalteNr" Content="SpalteNr" BorderThickness="1" BorderBrush="DarkGray"/>
-            </StatusBarItem>
-            <StatusBarItem>
-                <Label x:Name="LabelEinfg" Content="Einfg" BorderThickness="1" BorderBrush="DarkGray" />
-            </StatusBarItem>
-            <StatusBarItem DockPanel.Dock="Right" Width="100">
-                <Slider x:Name="SliderZoom" Grid.Column="1" Width="100" Ticks="1, 2, 3, 4, 5, 6, 7, 8, 9, 10" Value="1" Delay="100" Interval="5" TickPlacement="BottomRight" Minimum="1" Maximum="10" ValueChanged="SliderZoom_ValueChanged" HorizontalContentAlignment="Left" />
-            </StatusBarItem>                        
-        </StatusBar>
-        <RichTextBox x:Name="RichTextControl" SpellCheck.IsEnabled="True" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" SelectionChanged="RichTextControl_SelectionChanged" TextChanged="RichTextControl_TextChanged" KeyDown="RichTextControl_KeyDown" KeyUp="RichTextControl_KeyUp" />        
+        <DockPanel x:Name="StatusBar" DockPanel.Dock="Bottom" LastChildFill="False">
+            <TextBlock x:Name="LabelZeileSpalte" Text="行:0 列:0" Foreground="{DynamicResource TextBrush}" FontSize="10" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+            <Slider x:Name="SliderZoom" DockPanel.Dock="Right" Width="100" Value="1" Delay="100" Interval="5"  Minimum="1" Maximum="2" Margin="4" ValueChanged="SliderZoom_ValueChanged"/>
+        </DockPanel>
+        <WindowsFormsHost>
+            <wf:RichTextBox x:Name="RichTextControlWF" SelectionChanged="RichTextControlWF_SelectionChanged" TextChanged="RichTextControlWF_TextChanged" KeyDown="RichTextControlWF_KeyDown" KeyUp="RichTextControlWF_KeyUp"/>
+        </WindowsFormsHost>
+        <!--
+        <RichTextBox x:Name="RichTextControl" SpellCheck.IsEnabled="False" Block.LineHeight="1" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" SelectionChanged="RichTextControl_SelectionChanged" TextChanged="RichTextControl_TextChanged" KeyDown="RichTextControl_KeyDown" KeyUp="RichTextControl_KeyUp" >
+            <RichTextBox.LayoutTransform>
+                <ScaleTransform ScaleX="{Binding ElementName=SliderZoom, Path=Value}" ScaleY="{Binding ElementName=SliderZoom, Path=Value}"/>
+            </RichTextBox.LayoutTransform>
+        </RichTextBox>
+        -->
     </DockPanel>
 </UserControl>

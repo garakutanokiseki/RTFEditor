@@ -13,8 +13,9 @@ namespace RTFEditor
         public FontList() 
         {
             foreach (FontFamily f in Fonts.SystemFontFamilies)
-            {                
-                this.Add(f.ToString());                
+            {
+                System.Drawing.Font font = new System.Drawing.Font(f.ToString(), 8);
+                this.Add(font.Name);                
             }  
         }   
     }

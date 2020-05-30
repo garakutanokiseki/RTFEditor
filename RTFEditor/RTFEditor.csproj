@@ -1,36 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net46;netcoreapp3.1</TargetFrameworks>
     <ExpressionBlendVersion>3.0.1938.0</ExpressionBlendVersion>
     <OutputType>Library</OutputType>
     <DefaultClrNameSpace>RTFEditor</DefaultClrNameSpace>
     <ApplicationVersion>1.0.0.*</ApplicationVersion>
     <ApplicationRevision>0</ApplicationRevision>
     <AlwaysCompileMarkupFilesInSeparateDomain>false</AlwaysCompileMarkupFilesInSeparateDomain>
-    <OldToolsVersion>3.5</OldToolsVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Update="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Update="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <None Remove="AlignLeft.png" />
+    <None Remove="Images\AlignCenter.png" />
+    <None Remove="Images\AlignLeft.png" />
+    <None Remove="Images\AlignRight.png" />
+    <None Remove="Images\Backcolor.png" />
+    <None Remove="Images\Bold.png" />
+    <None Remove="Images\BulletList.png" />
+    <None Remove="Images\Copy.png" />
+    <None Remove="Images\Cut.png" />
+    <None Remove="Images\Indent.png" />
+    <None Remove="Images\IndentRemove.png" />
+    <None Remove="Images\Italic.png" />
+    <None Remove="Images\NumbersList.png" />
+    <None Remove="Images\Open-48x48.png" />
+    <None Remove="Images\Open.png" />
+    <None Remove="Images\Paste.png" />
+    <None Remove="Images\Print.png" />
+    <None Remove="Images\Redo.png" />
+    <None Remove="Images\Strikeout.png" />
+    <None Remove="Images\Subscript.png" />
+    <None Remove="Images\Superscript.png" />
+    <None Remove="Images\Textcolor.png" />
+    <None Remove="Images\Underline.png" />
+    <None Remove="Images\Undo.png" />
   </ItemGroup>
+
   <ItemGroup>
-    <Page Include="RTFBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Update="RTFBox.xaml.cs">
-      <DependentUpon>RTFBox.xaml</DependentUpon>
-    </Compile>
+    <ProjectReference Include="..\CustomWPFColorPicker\CustomWPFColorPicker.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Resource Include="Images\AlignCenter.png" />
     <Resource Include="Images\AlignLeft.png" />
@@ -44,6 +56,7 @@
     <Resource Include="Images\IndentRemove.png" />
     <Resource Include="Images\Italic.png" />
     <Resource Include="Images\NumbersList.png" />
+    <Resource Include="Images\Open-48x48.png" />
     <Resource Include="Images\Open.png" />
     <Resource Include="Images\Paste.png" />
     <Resource Include="Images\Print.png" />
@@ -54,11 +67,5 @@
     <Resource Include="Images\Textcolor.png" />
     <Resource Include="Images\Underline.png" />
     <Resource Include="Images\Undo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ColorPicker\ColorPicker.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
 </Project>

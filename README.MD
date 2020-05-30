@@ -7,7 +7,11 @@ Therefore I use WinForms RichTextBox.
 # Original
 Original source code is here.  
 
-https://www.codeproject.com/Articles/50139/WPF-RichTextEditor-with-Toolbar
+WPF RichTextEditor with Toolbar  
+https://www.codeproject.com/Articles/50139/WPF-RichTextEditor-with-Toolbar  
+
+WPF Color Picker Like Office 2007
+https://www.codeproject.com/Articles/52795/WPF-Color-Picker-Like-Office-2007  
 
 # License
 
