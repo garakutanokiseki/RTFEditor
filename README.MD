@@ -4,6 +4,10 @@ This source code is WinForms RichTextBox user control for WPF.
 WPF's RichTextBox is very slow.
 Therefore I use WinForms RichTextBox.
 
+# screenshot
+
+![Screen Shot](screenshot.png)
+
 # Original
 Original source code is here.  
 
