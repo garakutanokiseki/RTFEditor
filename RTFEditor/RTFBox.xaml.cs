@@ -507,17 +507,13 @@ namespace RTFEditor
         //
         public void PrintDocument()
         {
-            // Configure printer dialog box
-            PrintDialog dlg = new PrintDialog();
-            dlg.PageRangeSelection = PageRangeSelection.AllPages;
-            dlg.UserPageRangeEnabled = true;
 
-            // Show and process save file dialog box results
-            if (dlg.ShowDialog() == true)
+            System.Windows.Forms.PrintDialog dlg = new System.Windows.Forms.PrintDialog();
+            dlg.Document = new System.Drawing.Printing.PrintDocument();
+
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                //use either one of the below    
-                // dlg.PrintVisual(RichTextControl as Visual, "printing as visual");
-                //dlg.PrintDocument((((IDocumentPaginatorSource)RichTextControl.Document).DocumentPaginator), "printing as paginator");
+                RichTextControlWF.Print(dlg.Document);
             }
         }
 
