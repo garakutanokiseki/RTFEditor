@@ -30,10 +30,10 @@ namespace RTFEditor
         {
             this.InitializeComponent();
 
-            //textColorPicker.ColorSelected += TextColorSelectedHandler;
-            //backColorPicker.ColorSelected += BackColorSelectedHandler;
+            RichTextControlWF.DisableBeep();
+            CommandBindings.Add(new CommandBinding(SearchCommand, SearchCommandExecute));
         }
-       
+
         #region Variablen
 
         private bool dataChanged = false; // ungespeicherte Textänderungen     
@@ -74,8 +74,16 @@ namespace RTFEditor
                 UpdateCurolLocation(privAktZeile, privAktSpalte);
             }
         }
-       
+
         #endregion Variablen     
+
+        #region command
+        public static RoutedUICommand SearchCommand = new RoutedUICommand("SearchCommand", "SearchCommand", typeof(RTFBox));
+        private void SearchCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            txtSearch.Focus();
+        }
+        #endregion
 
         #region ControlHandler
 
@@ -85,14 +93,14 @@ namespace RTFEditor
         private void RTFEditor_Loaded(object sender, RoutedEventArgs e)
         {
             // Schrifttypen- und -größen-Initialisierung
-            Fonttype.SelectedValue = System.Windows.Forms.Control.DefaultFont.Name;
-            Fontheight.SelectedValue = "10";
+            Fonttype.SelectedValue = "ＭＳ ゴシック";
+            Fontheight.SelectedValue = "12";
+
+            DisableDefaultFont();
 
             // aktuelle Zeilen- und Spaltenpositionen angeben
             aktZeile = Zeilennummer();
             aktSpalte = Spaltennummer();           
-
-            RichTextControlWF.Focus();
         }
 
 
@@ -105,6 +113,7 @@ namespace RTFEditor
             System.Drawing.Font font = RichTextControlWF.SelectionFont;
             if (font != null) {
                 RichTextControlWF.SelectionFont = new System.Drawing.Font(font, font.Style ^ System.Drawing.FontStyle.Bold);
+                RichTextControlWF.Focus();
             }
         }
 
@@ -114,6 +123,7 @@ namespace RTFEditor
             if (font != null)
             {
                 RichTextControlWF.SelectionFont = new System.Drawing.Font(font, font.Style ^ System.Drawing.FontStyle.Italic);
+                RichTextControlWF.Focus();
             }
         }
 
@@ -123,6 +133,7 @@ namespace RTFEditor
             if (font != null)
             {
                 RichTextControlWF.SelectionFont = new System.Drawing.Font(font, font.Style ^ System.Drawing.FontStyle.Underline);
+                RichTextControlWF.Focus();
             }
         }
 
@@ -136,6 +147,7 @@ namespace RTFEditor
             if (font != null)
             {
                 RichTextControlWF.SelectionFont = new System.Drawing.Font(font, font.Style ^ System.Drawing.FontStyle.Strikeout);
+                RichTextControlWF.Focus();
             }
         }
 
@@ -151,6 +163,7 @@ namespace RTFEditor
                 textColorPicker.CurrentColor.Color.R, 
                 textColorPicker.CurrentColor.Color.G, 
                 textColorPicker.CurrentColor.Color.B);
+            RichTextControlWF.Focus();
         }
 
         //
@@ -165,6 +178,7 @@ namespace RTFEditor
                 backColorPicker.CurrentColor.Color.R,
                 backColorPicker.CurrentColor.Color.G,
                 backColorPicker.CurrentColor.Color.B);
+            RichTextControlWF.Focus();
         }
 
         //
@@ -182,20 +196,19 @@ namespace RTFEditor
         {
             string fontHeight = (string)Fontheight.SelectedItem;
 
-            if (fontHeight != null)
-            {
-                //RichTextControl.Selection.ApplyPropertyValue(System.Windows.Controls.RichTextBox.FontSizeProperty, fontHeight);
-
-                System.Drawing.Font font = RichTextControlWF.SelectionFont;
-                if (font != null)
-                {
-                    RichTextControlWF.SelectionFont = new System.Drawing.Font(font.FontFamily, float.Parse(fontHeight), font.Style);
-                }
-                else {
-                    RichTextControlWF.SelectionFont = new System.Drawing.Font(System.Windows.Forms.Control.DefaultFont.FontFamily, float.Parse(fontHeight));
-                }
-                RichTextControlWF.Focus();
+            if (fontHeight == null) {
+                fontHeight = "12";
             }
+
+            System.Drawing.Font font = RichTextControlWF.SelectionFont;
+            if (font != null)
+            {
+                RichTextControlWF.SelectionFont = new System.Drawing.Font(font.FontFamily, float.Parse(fontHeight), font.Style);
+            }
+            else {
+                RichTextControlWF.SelectionFont = new System.Drawing.Font(System.Windows.Forms.Control.DefaultFont.FontFamily, float.Parse(fontHeight));
+            }
+            RichTextControlWF.Focus();
         }
 
         //
@@ -205,20 +218,21 @@ namespace RTFEditor
         {            
             string fontName = (string)Fonttype.SelectedItem;
 
-            if (fontName != null)
-            {
-                System.Drawing.Font font = RichTextControlWF.SelectionFont;
-                if (font != null)
-                {
-                    RichTextControlWF.SelectionFont = new System.Drawing.Font(fontName, font.SizeInPoints, font.Style);
-                }
-                else {
-                    string fontHeight = (string)Fontheight.SelectedItem;
-                    if (fontHeight == null) fontHeight = "10";
-                    RichTextControlWF.SelectionFont = new System.Drawing.Font(fontName, float.Parse(fontHeight));
-                }
-                RichTextControlWF.Focus();
+            if (fontName == null) { 
+                fontName = "ＭＳ ゴシック";
             }
+
+            System.Drawing.Font font = RichTextControlWF.SelectionFont;
+            if (font != null)
+            {
+                RichTextControlWF.SelectionFont = new System.Drawing.Font(fontName, font.SizeInPoints, font.Style);
+            }
+            else {
+                string fontHeight = (string)Fontheight.SelectedItem;
+                if (fontHeight == null) fontHeight = "12";
+                RichTextControlWF.SelectionFont = new System.Drawing.Font(fontName, float.Parse(fontHeight));
+            }
+            RichTextControlWF.Focus();
         }
 
         //
@@ -232,6 +246,7 @@ namespace RTFEditor
                 ToolStripButtonAlignRight.IsChecked = false;
 
                 RichTextControlWF.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Left;
+                RichTextControlWF.Focus();
             }
         }
 
@@ -246,6 +261,7 @@ namespace RTFEditor
                 ToolStripButtonAlignRight.IsChecked = false;
 
                 RichTextControlWF.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Center;
+                RichTextControlWF.Focus();
             }
 
         }
@@ -261,6 +277,7 @@ namespace RTFEditor
                 ToolStripButtonAlignLeft.IsChecked = false;
 
                 RichTextControlWF.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Right;
+                RichTextControlWF.Focus();
             }
         }
 
@@ -273,6 +290,7 @@ namespace RTFEditor
         private void ToolStripButtonBulletList_Click(object sender, RoutedEventArgs e)
         {
             RichTextControlWF.SelectionBullet = !RichTextControlWF.SelectionBullet;
+            RichTextControlWF.Focus();
 
         }
 
@@ -286,6 +304,7 @@ namespace RTFEditor
             }
 
             RichTextControlWF.SelectionIndent += indent_size;
+            RichTextControlWF.Focus();
         }
 
         private void ToolStripButtonIndentDelete_Click(object sender, RoutedEventArgs e)
@@ -299,13 +318,136 @@ namespace RTFEditor
 
             RichTextControlWF.SelectionIndent -= indent_size;
             if (RichTextControlWF.SelectionIndent < 0) RichTextControlWF.SelectionIndent = 0;
+            RichTextControlWF.Focus();
 
         }
+
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            mFindPos = 0;
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter) return;
+            ToolStripButtonSearch_Click(null, null);
+        }
+
+        int mFindPos = 0;
+        private void ToolStripButtonSearch_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtSearch.Text.Length == 0) return;
+
+            //文字列を検索する
+            mFindPos = RichTextControlWF.Find(txtSearch.Text, mFindPos, System.Windows.Forms.RichTextBoxFinds.MatchCase);
+
+            //指定文字列が見つかったか？
+            if (mFindPos > -1)
+            {
+                //見つかった位置から、文字数分を選択
+                RichTextControlWF.Select(mFindPos, txtSearch.Text.Length);
+                //フォーカスを当てる（フォーカスがはずれると選択が無効になってしまうため）
+                RichTextControlWF.Focus();
+                mFindPos += txtSearch.Text.Length;
+            }
+            else
+            {
+                mFindPos = 0;
+            }
+        }
+
+        private System.Drawing.Image LoadImageWithSize(string sourceFile, int width, int height)
+        {
+            // サイズ変更する画像ファイルを開く
+            using (System.Drawing.Image image = System.Drawing.Image.FromFile(sourceFile))
+            {
+                // 変更倍率を取得する
+                float scale = Math.Min((float)width / (float)image.Width, (float)height / (float)image.Height);
+
+                // サイズ変更した画像を作成する
+                System.Drawing.Bitmap bitmap = null;
+                // 変更サイズを取得する
+                int widthToScale = (int)(image.Width * scale);
+                int heightToScale = (int)(image.Height * scale);
+
+                bitmap = new System.Drawing.Bitmap(widthToScale, heightToScale);
+                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bitmap)) { 
+
+                    // 背景色を塗る
+                    System.Drawing.SolidBrush solidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+                    graphics.FillRectangle(solidBrush, new System.Drawing.RectangleF(0, 0, width, height));
+
+                    // サイズ変更した画像に、左上を起点に変更する画像を描画する
+                    graphics.DrawImage(image, 0, 0, widthToScale, heightToScale);
+
+                }
+
+                return bitmap;
+            }
+        }
+
+        private void ToolStripButtonInsertImage_Click(object sender, RoutedEventArgs e) {
+            // Configure open file dialog box
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = ""; // Default file name
+            dlg.Filter = "All Image Files|*.bmp;*.ico;*.gif;*.jpeg;*.jpg;*.png;*.tif;*.tiff|" +
+                             "Windows Bitmap(*.bmp)|*.bmp|" +
+                             "Windows Icon(*.ico)|*.ico|" +
+                             "Graphics Interchange Format (*.gif)|(*.gif)|" +
+                             "JPEG File Interchange Format (*.jpg)|*.jpg;*.jpeg|" +
+                             "Portable Network Graphics (*.png)|*.png|" +
+                             "Tag Image File Format (*.tif)|*.tif;*.tiff";
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                try
+                {
+                    // If file is an icon
+                    if (dlg.FileName.ToUpper().EndsWith(".ICO"))
+                    {
+                        // Create a new icon, get it's handle, and create a bitmap from
+                        // its handle
+                        RichTextControlWF.InsertImage(System.Drawing.Bitmap.FromHicon((new System.Drawing.Icon(dlg.FileName)).Handle));
+                        //System.Windows.Forms.Clipboard.SetImage(System.Drawing.Bitmap.FromHicon((new System.Drawing.Icon(dlg.FileName)).Handle));
+                        //RichTextControlWF.Paste();
+                    }
+                    else
+                    {
+                        // Create a bitmap from the filename
+                        System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)LoadImageWithSize(dlg.FileName, 640, 640);
+                        if (bmp != null) {
+                            RichTextControlWF.InsertImage(bmp);
+                            //System.Windows.Forms.Clipboard.SetImage(bmp);
+                            //RichTextControlWF.Paste();
+                        }
+                        bmp.Dispose();
+                    }
+                }
+                catch (Exception _e)
+                {
+                    MessageBox.Show("Error : " + _e.GetType().Name + "\nDeatail : " + _e.Message + "\nStack : " + _e.StackTrace);
+
+                }
+            }
+        }
+
+        private void ToolStripButtonInsertTable_Click(object sender, RoutedEventArgs e) {
+            DialogCreatTable dlg = new DialogCreatTable();
+            dlg.Owner = Window.GetWindow(this);
+            if (dlg.ShowDialog() == true) {
+                RichTextControlWF.InsertTable(dlg.row, dlg.column, 100);
+            }
+        }
+
         #endregion private ToolBarHandler
 
-        #region private RichTextBoxHandler
+            #region private RichTextBoxHandler
 
-        private void RichTextControlWF_SelectionChanged(object sender, EventArgs e)
+            private void RichTextControlWF_SelectionChanged(object sender, EventArgs e)
         {
             // markierten Text holen
             System.Drawing.Font font = RichTextControlWF.SelectionFont;
@@ -333,8 +475,8 @@ namespace RTFEditor
             }
             else
             {
-                Fonttype.SelectedValue = System.Windows.Forms.Control.DefaultFont.Name;
-                Fontheight.SelectedValue = "10";
+                Fonttype.SelectedValue = "ＭＳ ゴシック";//System.Windows.Forms.Control.DefaultFont.Name;
+                Fontheight.SelectedValue = "12";
             }
 
             // Ausgabe der Zeilennummer
@@ -388,11 +530,15 @@ namespace RTFEditor
 
         #region private Funktionen
 
-        const int EM_LINEINDEX = 0xBB;
-        const int EM_LINEFROMCHAR = 0xC9;
+        const uint EM_LINEINDEX = 0xBB;
+        const uint EM_LINEFROMCHAR = 0xC9;
+        const uint IMF_DUALFONT = 0x80;
+        const uint WM_USER = 0x0400;
+        const uint EM_SETLANGOPTIONS = WM_USER + (uint)120;
+        const uint EM_GETLANGOPTIONS = WM_USER + (uint)121;
 
         [DllImport("User32.Dll")]
-        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        private static extern int SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
         //
         // Gibt die Zeilennummer der aktuellen Cursorposition zurück
@@ -415,7 +561,16 @@ namespace RTFEditor
             LabelZeileSpalte.Text = String.Format("行:{0} 列:{1}", row,  columun);
         }
 
+        //デフォルトフォントを無効にする
+        private void DisableDefaultFont() {
+            uint lParam;
+            lParam = (uint)SendMessage(RichTextControlWF.Handle, EM_GETLANGOPTIONS, 0, 0);
+            lParam &= ~IMF_DUALFONT;
+            SendMessage(RichTextControlWF.Handle, EM_SETLANGOPTIONS, 0, (int)lParam);
+        }
+
         #endregion private Funktionen
+
 
         # region öffentliche Funktionen
 
@@ -425,7 +580,7 @@ namespace RTFEditor
         public void Clear()
         {            
             dataChanged = false;            
-            RichTextControlWF.Clear();            
+            RichTextControlWF.Clear();
         }
 
         //
@@ -433,7 +588,15 @@ namespace RTFEditor
         //
         public void SetRTF(string rtf)
         {
+            System.Drawing.Font font = GetCurrentFont();
+
             RichTextControlWF.Rtf = rtf;
+            if (rtf == "") {
+                RichTextControlWF.Font = font;
+                RichTextControlWF.SelectionFont = font;
+            }
+            RichTextControlWF.ZoomFactor = (float)SliderZoom.Value;
+
         }
 
         //
@@ -474,6 +637,7 @@ namespace RTFEditor
                 if (File.Exists(path))
                 {
                     RichTextControlWF.LoadFile(path);
+                    RichTextControlWF.ZoomFactor = (float)SliderZoom.Value;
                 }
             }
         }
@@ -481,11 +645,11 @@ namespace RTFEditor
         //
         // ファイルダイアログを表示し、RTFファイルをロードする
         //
-        public void SaveRtfFile()
+        public void SaveRtfFile(String name)
         {
             // Configure save file dialog box
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = ""; // Default file name
+            dlg.FileName = name; // Default file name
             dlg.DefaultExt = ".rtf"; // Default file extension
             dlg.Filter = "RichText documents (.rtf)|*.rtf"; // Filter files by extension
 
@@ -517,7 +681,43 @@ namespace RTFEditor
             }
         }
 
+
+        //現在のフォントを取得する
+        private System.Drawing.Font GetCurrentFont()
+        {
+            string fontName = (string)Fonttype.SelectedItem;
+
+            if (fontName == null) fontName = "ＭＳ ゴシック";
+            string fontHeight = (string)Fontheight.SelectedItem;
+            if (fontHeight == null) fontHeight = "12";
+            return new System.Drawing.Font(fontName, float.Parse(fontHeight));
+        }
+
         #endregion öffentliche Funktionen
 
+        private void RichTextControlWF_LinkClicked(object sender, System.Windows.Forms.LinkClickedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(e.LinkText);
+            }
+            catch (Exception ex) {
+                MessageBox.Show("エラー", ex.Message);
+            }
+        }
+
+        private void RTFEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key) {
+            case Key.F3:
+                ToolStripButtonSearch_Click(null, null);
+                e.Handled = true;
+                break;
+            case Key.Escape:
+                RichTextControlWF.Focus();
+                e.Handled = true;
+                break;
+            }
+        }
     }
 }

@@ -22,6 +22,7 @@
     <None Remove="Images\BulletList.png" />
     <None Remove="Images\Copy.png" />
     <None Remove="Images\Cut.png" />
+    <None Remove="Images\generic_picture.png" />
     <None Remove="Images\Indent.png" />
     <None Remove="Images\IndentRemove.png" />
     <None Remove="Images\Italic.png" />
@@ -31,9 +32,11 @@
     <None Remove="Images\Paste.png" />
     <None Remove="Images\Print.png" />
     <None Remove="Images\Redo.png" />
+    <None Remove="Images\Search_white_16x.png" />
     <None Remove="Images\Strikeout.png" />
     <None Remove="Images\Subscript.png" />
     <None Remove="Images\Superscript.png" />
+    <None Remove="Images\TableHS.png" />
     <None Remove="Images\Textcolor.png" />
     <None Remove="Images\Underline.png" />
     <None Remove="Images\Undo.png" />
@@ -52,6 +55,7 @@
     <Resource Include="Images\BulletList.png" />
     <Resource Include="Images\Copy.png" />
     <Resource Include="Images\Cut.png" />
+    <Resource Include="Images\generic_picture.png" />
     <Resource Include="Images\Indent.png" />
     <Resource Include="Images\IndentRemove.png" />
     <Resource Include="Images\Italic.png" />
@@ -61,9 +65,11 @@
     <Resource Include="Images\Paste.png" />
     <Resource Include="Images\Print.png" />
     <Resource Include="Images\Redo.png" />
+    <Resource Include="Images\Search_white_16x.png" />
     <Resource Include="Images\Strikeout.png" />
     <Resource Include="Images\Subscript.png" />
     <Resource Include="Images\Superscript.png" />
+    <Resource Include="Images\TableHS.png" />
     <Resource Include="Images\Textcolor.png" />
     <Resource Include="Images\Underline.png" />
     <Resource Include="Images\Undo.png" />
