@@ -587,14 +587,8 @@ namespace Khendys.Controls {
 			// it to the RTF string
 			_rtf.Append(GetFontTable(this.Font));
 
-			// Create the image control string and append it to the RTF string
-			_rtf.Append(GetImagePrefix(_image));
-
 			// Create the Windows Metafile and append its bytes in HEX format
-			_rtf.Append(GetRtfImage(_image));
-
-			// Close the RTF image control string
-			_rtf.Append(RTF_IMAGE_POST);
+			_rtf.Append(InsertJpgImage(_image));
 
 			//Close RTF header
 			_rtf.Append(RTF_IMAGE_POST);
@@ -602,6 +596,37 @@ namespace Khendys.Controls {
 			//File.WriteAllText("image_rtf.txt", _rtf.ToString());
 
 			this.SelectedRtf = _rtf.ToString();
+		}
+
+		private static string GetWidthAndHeight(Image image, float dpiX, float dpiY)
+		{
+			float width = (float)image.Width / dpiX;
+			float height = (float)image.Height / dpiY;
+
+			int picw = (int)(width * 2540);
+			int pich = (int)(height * 2540);
+
+			int picwgoal = (int)(width * 1440);
+			int pichgoal = (int)(height * 1440);
+
+			return "\\picw" + picw + "\\pich" + pich + "\\picwgoal" + picwgoal + "\\pichgoal" + pichgoal;
+		}
+
+		public static string InsertJpgImage(Image image)
+		{
+			byte[] buffer;
+
+			using (var stream = new MemoryStream())
+			{
+				image.Save(stream, ImageFormat.Jpeg);
+				buffer = stream.ToArray();
+			}
+
+			string hex = BitConverter.ToString(buffer, 0).Replace("-", string.Empty);
+
+			string widthAndHeight = GetWidthAndHeight(image, image.HorizontalResolution, image.VerticalResolution);
+
+			return "{\\pict\\jpegblip" + widthAndHeight + " " + hex + "}";
 		}
 
 		/// <summary>
